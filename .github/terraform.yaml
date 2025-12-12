@@ -11,6 +11,9 @@ on:
           - plan
           - apply
           - destroy
+  push:  
+    branches:
+      - main
 
 jobs:
   terraform:
@@ -24,7 +27,7 @@ jobs:
     
     defaults:
       run:
-        working-directory: ./iac  # Ajusta si tu código está en otra carpeta
+        working-directory: ./iac  
     
     steps:
       # 1. Checkout del código
@@ -83,7 +86,3 @@ jobs:
           TF_VAR_region: us-central1
           TF_VAR_admin_user_email: ${{ secrets.ADMIN_EMAIL }}
       
-      # 10. Mostrar outputs (solo si apply)
-      - name: Terraform Output
-        if: github.event.inputs.action == 'apply'
-        run: terraform output
