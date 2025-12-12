@@ -1,0 +1,89 @@
+name: Terraform GCP Infrastructure
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Acción a ejecutar'
+        required: true
+        type: choice
+        options:
+          - plan
+          - apply
+          - destroy
+
+jobs:
+  terraform:
+    name: 'Terraform ${{ github.event.inputs.action }}'
+    runs-on: ubuntu-latest
+    
+    # Permisos necesarios para autenticación con Workload Identity
+    permissions:
+      contents: read
+      id-token: write
+    
+    defaults:
+      run:
+        working-directory: ./iac  # Ajusta si tu código está en otra carpeta
+    
+    steps:
+      # 1. Checkout del código
+      - name: Checkout código
+        uses: actions/checkout@v4
+      
+      # 2. Autenticación en GCP con Service Account
+      - name: Autenticar en Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+      
+      # 3. Configurar gcloud CLI
+      - name: Configurar gcloud
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+      
+      # 4. Instalar Terraform
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.0
+      
+      # 5. Inicializar Terraform
+      - name: Terraform Init
+        run: terraform init
+      
+      # 6. Validar sintaxis
+      - name: Terraform Validate
+        run: terraform validate
+      
+      # 7. Ejecutar Plan (siempre)
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+        env:
+          TF_VAR_project_id: ${{ secrets.GCP_PROJECT_ID }}
+          TF_VAR_region: us-central1
+          TF_VAR_admin_user_email: ${{ secrets.ADMIN_EMAIL }}
+      
+      # 8. Ejecutar Apply (solo si action = apply)
+      - name: Terraform Apply
+        if: github.event.inputs.action == 'apply'
+        run: terraform apply -auto-approve tfplan
+        env:
+          TF_VAR_project_id: ${{ secrets.GCP_PROJECT_ID }}
+          TF_VAR_region: us-central1
+          TF_VAR_admin_user_email: ${{ secrets.ADMIN_EMAIL }}
+      
+      # 9. Ejecutar Destroy (solo si action = destroy)
+      - name: Terraform Destroy
+        if: github.event.inputs.action == 'destroy'
+        run: terraform destroy -auto-approve
+        env:
+          TF_VAR_project_id: ${{ secrets.GCP_PROJECT_ID }}
+          TF_VAR_region: us-central1
+          TF_VAR_admin_user_email: ${{ secrets.ADMIN_EMAIL }}
+      
+      # 10. Mostrar outputs (solo si apply)
+      - name: Terraform Output
+        if: github.event.inputs.action == 'apply'
+        run: terraform output
