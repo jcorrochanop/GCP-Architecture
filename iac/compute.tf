@@ -13,7 +13,7 @@ resource "google_compute_instance" "vm_pro_1" {
     }
 
     # Cifrado con Cloud KMS
-    kms_key_self_link = google_kms_crypto_key.vm_disk_key.id
+    kms_key_self_link = data.google_kms_crypto_key.vm_disk_key.id
   }
 
   network_interface {
@@ -52,7 +52,7 @@ resource "google_compute_instance" "vm_pro_2" {
       type  = "pd-standard"
     }
 
-    kms_key_self_link = google_kms_crypto_key.vm_disk_key.id
+    kms_key_self_link = data.google_kms_crypto_key.vm_disk_key.id
   }
 
   network_interface {
@@ -88,7 +88,7 @@ resource "google_compute_instance" "vm_dev_1" {
       type  = "pd-standard"
     }
 
-    kms_key_self_link = google_kms_crypto_key.vm_disk_key.id
+    kms_key_self_link = data.google_kms_crypto_key.vm_disk_key.id
   }
 
   network_interface {
@@ -124,7 +124,7 @@ resource "google_compute_instance" "vm_dev_2" {
       type  = "pd-standard"
     }
 
-    kms_key_self_link = google_kms_crypto_key.vm_disk_key.id
+    kms_key_self_link = data.google_kms_crypto_key.vm_disk_key.id
   }
 
   network_interface {

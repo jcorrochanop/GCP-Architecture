@@ -93,13 +93,13 @@ variable "vpc_dev_subnets" {
 variable "kms_keyring_name" {
   description = "Nombre del Key Ring de Cloud KMS"
   type        = string
-  default     = "vm-kering-prod"
+  default     = "vm-kering-proyecto"
 }
 
 variable "kms_key_name" {
   description = "Nombre de la Crypto Key"
   type        = string
-  default     = "vm-disk-key-prod"
+  default     = "vm-disk-key-proyecto"
 }
 
 variable "kms_rotation_period" {
