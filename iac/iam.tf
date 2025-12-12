@@ -57,3 +57,15 @@ resource "google_project_iam_member" "github_actions_iap_tunnel" {
   role    = "roles/iap.tunnelResourceAccessor"
   member  = "serviceAccount:${google_service_account.github_actions.email}"
 }
+
+resource "google_project_iam_member" "github_actions_kms_viewer" {
+  project = var.project_id
+  role    = "roles/cloudkms.viewer"
+  member  = "serviceAccount:${google_service_account.github_actions.email}"
+}
+
+resource "google_project_iam_member" "github_actions_kms_encrypter_decrypter" {
+  project = var.project_id
+  role    = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
+  member  = "serviceAccount:${google_service_account.github_actions.email}"
+}
