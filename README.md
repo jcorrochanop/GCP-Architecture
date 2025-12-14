@@ -248,7 +248,38 @@ ping -c 3 10.1.1.2
 
 ***
 
-### 12. Destruir infraestructura
+## 12. Verificar usuarios OS Login y permisos sudo
+
+Después de ejecutar el despliegue con GitHub Actions, se confirma que se han creado correctamente los dos tipos de usuarios (admin con sudo y service account sin sudo) dentro de las VMs.
+
+```bash
+gcloud compute ssh vm-dev-1 --tunnel-through-iap
+```
+
+Una vez conectado, se ejecuta el siguiente comando para listar los usuarios y verificar permisos sudo:
+
+```bash
+echo "Usuarios:"; getent passwd | grep -E "jcorrochano|sa_"; echo ""; echo "Con sudo:"; sudo ls -1 /var google-sudoers.d/
+```
+
+**Salida esperada:**
+
+```
+Usuarios:
+sa_111117803067181122508:*:4191275422:4191275422::/home/sa_111117803067181122508:/bin/bash
+jcorrochano_stemdo_io:*:1511099882:1511099882::/home/jcorrochano_stemdo_io:/bin/bash
+
+Con sudo:
+jcorrochano_stemdo_io
+```
+
+Esta salida confirma que:
+- **Usuario administrador** (`jcorrochano_stemdo_io`): Tiene privilegios sudo para administración del sistema
+- **Service Account de GitHub Actions** (`sa_*`): Sin privilegios sudo, siguiendo el principio de mínimo privilegio para automatización
+
+***
+
+### 13. Destruir infraestructura
 
 Elimina todos los recursos creados por Terraform. Los Key Rings de KMS no se borran (limitación de Google Cloud por seguridad).
 
