@@ -69,3 +69,15 @@ resource "google_project_iam_member" "github_actions_kms_encrypter_decrypter" {
   role    = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
   member  = "serviceAccount:${google_service_account.github_actions.email}"
 }
+
+resource "google_storage_bucket_iam_member" "github_actions_state_viewer" {
+  bucket = "proyecto-terraform-state"
+  role   = "roles/storage.objectViewer"
+  member = "serviceAccount:${google_service_account.github_actions.email}"
+}
+
+resource "google_storage_bucket_iam_member" "github_actions_state_creator" {
+  bucket = "proyecto-terraform-state"
+  role   = "roles/storage.objectCreator"
+  member = "serviceAccount:${google_service_account.github_actions.email}"
+}
