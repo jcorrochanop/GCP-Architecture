@@ -68,18 +68,22 @@ Cloud KMS proporciona **cifrado gestionado por el cliente (CMEK)** para los disc
 
 Los permisos IAM definen **quién puede hacer qué** en el proyecto. El usuario administrador tiene control completo sobre las VMs y KMS. La Service Account `github-actions-sa` permite automatización CI/CD sin privilegios de sudo. El Compute Engine Service Account tiene acceso limitado solo a las claves KMS necesarias para cifrar/descifrar discos.
 
-| Usuario/Service Account        | Rol IAM                                    | Descripción                                                |
-| ------------------------------ | ------------------------------------------ | ---------------------------------------------------------- |
-| jcorrochano@stemdo.io          | roles/compute.osAdminLogin                 | Permite usar OS Login CON sudo en VMs                      |
-| jcorrochano@stemdo.io          | roles/iap.tunnelResourceAccessor           | Permite usar túneles IAP para conectarse                   |
-| jcorrochano@stemdo.io          | roles/compute.viewer                       | Permite ver recursos de Compute Engine                     |
-| jcorrochano@stemdo.io          | roles/compute.instanceAdmin.v1             | Permite gestionar VMs (crear, modificar, borrar)           |
-| jcorrochano@stemdo.io          | roles/cloudkms.admin                       | Administrador de claves KMS (crear, rotar, revocar)        |
-| jcorrochano@stemdo.io          | roles/cloudkms.cryptoKeyEncrypterDecrypter | Puede cifrar/descifrar con las claves KMS                  |
-| github-actions-sa              | roles/compute.osLogin                      | Permite usar OS Login SIN sudo en VMs                      |
-| github-actions-sa              | roles/iam.serviceAccountUser               | Permite actuar como Service Account                        |
-| github-actions-sa              | roles/iap.tunnelResourceAccessor           | Permite usar túneles IAP                                   |
-| Compute Engine Service Account | roles/cloudkms.cryptoKeyEncrypterDecrypter | Permite a VMs usar las claves para cifrar/descifrar discos |
+| Usuario/Service Account        | Rol IAM                                    | Descripción                                                          |
+| ------------------------------ | ------------------------------------------ | -------------------------------------------------------------------- |
+| jcorrochano@stemdo.io          | roles/compute.osAdminLogin                 | Permite usar OS Login CON sudo en VMs                                |
+| jcorrochano@stemdo.io          | roles/iap.tunnelResourceAccessor           | Permite usar túneles IAP para conectarse                             |
+| jcorrochano@stemdo.io          | roles/compute.viewer                       | Permite ver recursos de Compute Engine                               |
+| jcorrochano@stemdo.io          | roles/compute.instanceAdmin.v1             | Permite gestionar VMs (crear, modificar, borrar)                     |
+| jcorrochano@stemdo.io          | roles/cloudkms.admin                       | Administrador de claves KMS (crear, rotar, revocar)                  |
+| jcorrochano@stemdo.io          | roles/cloudkms.cryptoKeyEncrypterDecrypter | Puede cifrar/descifrar con las claves KMS                            |
+| github-actions-sa              | roles/compute.osLogin                      | Permite usar OS Login SIN sudo en VMs                                |
+| github-actions-sa              | roles/iam.serviceAccountUser               | Permite actuar como Service Account                                  |
+| github-actions-sa              | roles/iap.tunnelResourceAccessor           | Permite usar túneles IAP                                             |
+| github-actions-sa              | roles/compute.admin                        | Permite gestionar recursos de Compute Engine (VMs, redes, firewalls) |
+| github-actions-sa              | roles/iam.securityAdmin                    | Permite gestionar políticas IAM del proyecto                         |
+| github-actions-sa              | roles/storage.admin                        | Acceso completo a buckets de GCS (incluido Terraform state)          |
+| github-actions-sa              | roles/cloudkms.admin                       | Permite gestionar claves y políticas KMS                             |
+| Compute Engine Service Account | roles/cloudkms.cryptoKeyEncrypterDecrypter | Permite a VMs usar las claves para cifrar/descifrar discos           |
 
 ***
 
