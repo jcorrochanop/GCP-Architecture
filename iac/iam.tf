@@ -58,26 +58,27 @@ resource "google_project_iam_member" "github_actions_iap_tunnel" {
   member  = "serviceAccount:${google_service_account.github_actions.email}"
 }
 
-resource "google_project_iam_member" "github_actions_kms_viewer" {
+# Permisos para ejecutar Terraform
+resource "google_project_iam_member" "github_actions_compute_admin" {
   project = var.project_id
-  role    = "roles/cloudkms.viewer"
+  role    = "roles/compute.admin"
   member  = "serviceAccount:${google_service_account.github_actions.email}"
 }
 
-resource "google_project_iam_member" "github_actions_kms_encrypter_decrypter" {
+resource "google_project_iam_member" "github_actions_security_admin" {
   project = var.project_id
-  role    = "roles/cloudkms.cryptoKeyEncrypterDecrypter"
+  role    = "roles/iam.securityAdmin"
   member  = "serviceAccount:${google_service_account.github_actions.email}"
 }
 
-resource "google_storage_bucket_iam_member" "github_actions_state_viewer" {
-  bucket = "proyecto-terraform-state"
-  role   = "roles/storage.objectViewer"
-  member = "serviceAccount:${google_service_account.github_actions.email}"
+resource "google_project_iam_member" "github_actions_storage_admin" {
+  project = var.project_id
+  role    = "roles/storage.admin"
+  member  = "serviceAccount:${google_service_account.github_actions.email}"
 }
 
-resource "google_storage_bucket_iam_member" "github_actions_state_creator" {
-  bucket = "proyecto-terraform-state"
-  role   = "roles/storage.objectCreator"
-  member = "serviceAccount:${google_service_account.github_actions.email}"
+resource "google_project_iam_member" "github_actions_kms_admin" {
+  project = var.project_id
+  role    = "roles/cloudkms.admin"
+  member  = "serviceAccount:${google_service_account.github_actions.email}"
 }
