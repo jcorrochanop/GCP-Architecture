@@ -17,6 +17,7 @@ jobs:
     name: 'Terraform ${{ github.event.inputs.action }}'
     runs-on: ubuntu-latest
     
+    # Permisos necesarios para autenticación con Workload Identity
     permissions:
       contents: read
       id-token: write
@@ -52,7 +53,7 @@ jobs:
       - name: Terraform Init
         run: terraform init
             
-      # 7. Ejecutar Plan 
+      # 7. Ejecutar Plan (siempre)
       - name: Terraform Plan
         run: terraform plan -out=tfplan
         env:
@@ -68,7 +69,7 @@ jobs:
           TF_VAR_project_id: ${{ secrets.GCP_PROJECT_ID }}
           TF_VAR_region: us-central1
           TF_VAR_admin_user_email: ${{ secrets.ADMIN_EMAIL }}
-      
+
       # 9. Conectar a VMs para crear usuario de Service Account
       - name: Crear usuario OS Login en todas las VMs
         if: github.event.inputs.action == 'apply'
@@ -95,7 +96,8 @@ jobs:
             --zone=us-central1-a \
             --command="echo 'VM DEV 2: Service Account conectada' && whoami"
           
-          echo "✅ Usuario OS Login creado en todas las VMs"
+          echo "Usuario OS Login creado en todas las VMs"
+
       
       # 10. Ejecutar Destroy (solo si action = destroy)
       - name: Terraform Destroy
@@ -105,3 +107,5 @@ jobs:
           TF_VAR_project_id: ${{ secrets.GCP_PROJECT_ID }}
           TF_VAR_region: us-central1
           TF_VAR_admin_user_email: ${{ secrets.ADMIN_EMAIL }}
+
+
