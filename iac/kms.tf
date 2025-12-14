@@ -18,8 +18,3 @@ resource "google_kms_crypto_key_iam_member" "compute_engine_encrypter_decrypter"
   member        = "serviceAccount:service-${data.google_project.project.number}@compute-system.iam.gserviceaccount.com"
 }
 
-resource "google_project_iam_member" "github_actions_editor" {
-  project = var.project_id
-  role    = "roles/editor"
-  member  = "serviceAccount:${google_service_account.github_actions.email}"
-}
