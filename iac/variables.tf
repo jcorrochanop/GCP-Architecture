@@ -38,16 +38,6 @@ variable "vpc_pro_subnets" {
       name   = "subnet-1-pro"
       cidr   = "10.0.1.0/24"
       region = "us-central1"
-    },
-    {
-      name   = "subnet-2-pro"
-      cidr   = "10.0.2.0/24"
-      region = "us-central1"
-    },
-    {
-      name   = "subnet-3-pro"
-      cidr   = "10.0.3.0/24"
-      region = "us-central1"
     }
   ]
 }
@@ -76,16 +66,6 @@ variable "vpc_dev_subnets" {
       name   = "subnet-1-dev"
       cidr   = "10.1.1.0/24"
       region = "us-central1"
-    },
-    {
-      name   = "subnet-2-dev"
-      cidr   = "10.1.2.0/24"
-      region = "us-central1"
-    },
-    {
-      name   = "subnet-3-dev"
-      cidr   = "10.1.3.0/24"
-      region = "us-central1"
     }
   ]
 }
@@ -107,3 +87,16 @@ variable "kms_rotation_period" {
   type        = string
   default     = "7776000s"
 }
+
+variable "datadog_api_key" {
+  description = "API Key de Datadog para instalación del agente"
+  type        = string
+  sensitive   = true
+}
+
+variable "datadog_site" {
+  description = "Site de Datadog (datadoghq.eu para Europa)"
+  type        = string
+  default     = "datadoghq.eu"
+}
+

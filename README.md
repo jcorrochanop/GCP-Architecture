@@ -127,7 +127,7 @@ En esta arquitectura, IAP es fundamental porque:
 El flag `--tunnel-through-iap` activa esta funcionalidad:
 
 ```bash
-gcloud compute ssh vm-pro-2 --tunnel-through-iap
+gcloud compute ssh vm-pro-1 --tunnel-through-iap
 ```
 
 ***
